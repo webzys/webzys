@@ -19,31 +19,70 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html, body {
+        overflow-x: hidden;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+      body {
+        font-family: 'Montserrat', sans-serif;
+      }
+      .smooth-scroll {
+        scroll-behavior: smooth;
+      }
+      
+      /* Fix mobile horizontal scroll */
+      #root {
+        max-width: 100%;
+        overflow-x: hidden;
+        padding: 0;
+      }
+      
+      @media (max-width: 768px) {
+        #root {
+          padding: 1rem;
+        }
+        
+        .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+        
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+      }
+    </style>
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: {
-              montserrat: ['Montserrat', 'sans-serif'],
-            },
             colors: {
-              primary: '#6C63FF',
-              'primary-hover': '#5B52E5',
-              secondary: '#FF6F61',
-              'secondary-hover': '#FF5B4C',
-            },
-            animation: {
-              'fade-in': 'fadeIn 0.5s ease-out',
-              'bounce-subtle': 'bounceSubtle 2s infinite ease-in-out',
-            },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
+              primary: {
+                DEFAULT: '#6C63FF',
+                foreground: '#FFFFFF',
+                hover: '#5B52E5',
               },
-              bounceSubtle: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-5px)' },
+              secondary: {
+                DEFAULT: '#FF6F61',
+                foreground: '#FFFFFF',
+                hover: '#FF5B4C',
+              },
+              purple: {
+                light: '#8A84FF',
+                DEFAULT: '#6C63FF',
+                dark: '#5B52E5',
+              },
+              coral: {
+                light: '#FF8A7F',
+                DEFAULT: '#FF6F61',
+                dark: '#FF5B4C',
               },
             }
           }
