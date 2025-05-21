@@ -1,0 +1,1843 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Template Editor - Elegant Boutique</title>
+  <style>
+    /* --- Base Styles --- */
+    :root {
+      --primary: #9d8189;
+      --secondary: #f4acb7;
+      --accent: #d8e2dc;
+      --light: #fff1e6;
+      --dark: #594a4e;
+      --text: #2b2b2b;
+      --background: #fcf9f8;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --header-font: 'Cormorant Garamond', serif;
+      --body-font: 'Montserrat', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--body-font);
+      color: var(--text);
+      background-color: var(--background);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    button, .btn {
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-block;
+      background-color: var(--primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    button:hover, .btn:hover {
+      background-color: var(--dark);
+      transform: translateY(-2px);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    section {
+      padding: 5rem 0;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: var(--header-font);
+      line-height: 1.2;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 400;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    h3 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    /* --- Header Styles --- */
+    header {
+      background-color: var(--card);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0;
+      transition: padding 0.3s;
+    }
+
+    header.scrolled .navbar {
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-family: var(--header-font);
+      font-weight: 600;
+      font-size: 1.8rem;
+      color: var(--dark);
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: var(--primary);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--dark);
+      padding: 0.5rem;
+    }
+
+    /* --- Hero Section --- */
+    .hero {
+      position: relative;
+      background-color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+    }
+
+    .hero-subtitle {
+      font-family: var(--body-font);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--dark);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .hero-image {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    /* --- Featured Section --- */
+    .featured {
+      background-color: var(--card);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 25%;
+      width: 50%;
+      height: 1px;
+      background-color: var(--primary);
+    }
+
+    .section-title span {
+      color: var(--primary);
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .featured-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .featured-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .featured-img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .featured-card:hover .featured-img {
+      transform: scale(1.05);
+    }
+
+    .featured-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .featured-card:hover .featured-overlay {
+      opacity: 1;
+    }
+
+    .featured-title {
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .featured-price {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* --- Collections Section --- */
+    .collections {
+      background-color: var(--background);
+    }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+    }
+
+    .collection-card {
+      background-color: var(--card);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .collection-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .collection-img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+
+    .collection-content {
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .collection-title {
+      margin-bottom: 0.5rem;
+    }
+
+    /* --- About Section --- */
+    .about {
+      background-color: var(--light);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-img {
+      width: 100%;
+      height: auto;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- Testimonials Section --- */
+    .testimonials {
+      background-color: var(--card);
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background-color: var(--background);
+      padding: 2rem;
+      border: 1px solid var(--accent);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .author-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .author-title {
+      font-size: 0.9rem;
+      color: var(--primary);
+    }
+
+    /* --- Contact Section --- */
+    .contact {
+      background-color: var(--background);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .contact-form {
+      background-color: var(--card);
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .form-group textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    /* --- Footer --- */
+    footer {
+      background-color: var(--dark);
+      color: white;
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-logo {
+      font-family: var(--header-font);
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .footer-links h3 {
+      color: white;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--secondary);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      transition: background-color 0.3s;
+    }
+
+    .social-link:hover {
+      background-color: var(--primary);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* --- Newsletter --- */
+    .newsletter {
+      background-color: var(--primary);
+      color: white;
+      padding: 3rem 0;
+    }
+
+    .newsletter-content {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .newsletter-title {
+      color: white;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: none;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .newsletter-btn {
+      background-color: var(--dark);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .newsletter-btn:hover {
+      background-color: black;
+    }
+
+    /* --- Editor Styles --- */
+    .editor-panel {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background-color: white;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+
+    .editor-panel.open {
+      right: 0;
+    }
+
+    .editor-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--primary);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      z-index: 1001;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      border: none;
+    }
+
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .editor-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .editor-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text);
+      padding: 0.25rem;
+    }
+
+    .editor-section {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .editor-section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .editor-field {
+      margin-bottom: 1rem;
+    }
+
+    .editor-field label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .editor-field input,
+    .editor-field textarea,
+    .editor-field select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .editor-field textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .editor-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-editor {
+      flex: 1;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .btn-download {
+      background-color: var(--dark);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 1rem;
+      background-color: #10b981;
+      color: white;
+      border-radius: 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* --- Responsive Styles --- */
+    @media (max-width: 992px) {
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero-image {
+        opacity: 0.3;
+        width: 100%;
+      }
+      
+      .hero-content {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+        background-color: var(--card);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.3s, opacity 0.3s, visibility 0.3s;
+      }
+      
+      .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      .nav-links li {
+        width: 100%;
+      }
+      
+      .nav-links a {
+        display: block;
+        padding: 1rem;
+      }
+      
+      .editor-panel {
+        width: 100%;
+        right: -100%;
+      }
+    }
+  </style>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+  <!-- Editor Toggle Button -->
+  <button class="editor-toggle" id="editorToggle">
+    <i data-feather="edit-2"></i>
+  </button>
+  
+  <!-- Editor Panel -->
+  <div class="editor-panel" id="editorPanel">
+    <div class="editor-header">
+      <h3 class="editor-title">Site Editor</h3>
+      <button class="editor-close" id="editorClose">&times;</button>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">Metadata</h4>
+      <div class="editor-field">
+        <label for="edit-title">Page Title</label>
+        <input type="text" id="edit-title" name="title">
+      </div>
+      <div class="editor-field">
+        <label for="edit-description">Meta Description</label>
+        <textarea id="edit-description" name="description"></textarea>
+      </div>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">Header</h4>
+      <div class="editor-field">
+        <label for="edit-logo-text">Logo Text</label>
+        <input type="text" id="edit-logo-text" name="logoText">
+      </div>
+      <div class="editor-field">
+        <label for="edit-nav-items">Navigation Items (comma separated)</label>
+        <input type="text" id="edit-nav-items" name="navItems">
+      </div>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">Hero Section</h4>
+      <div class="editor-field">
+        <label for="edit-hero-subtitle">Subtitle</label>
+        <input type="text" id="edit-hero-subtitle" name="heroSubtitle">
+      </div>
+      <div class="editor-field">
+        <label for="edit-hero-title">Title</label>
+        <input type="text" id="edit-hero-title" name="heroTitle">
+      </div>
+      <div class="editor-field">
+        <label for="edit-hero-description">Description</label>
+        <textarea id="edit-hero-description" name="heroDescription"></textarea>
+      </div>
+      <div class="editor-field">
+        <label for="edit-hero-image">Hero Image URL</label>
+        <input type="text" id="edit-hero-image" name="heroImage">
+      </div>
+      <div class="editor-field">
+        <label for="edit-hero-cta1">CTA Button 1 Text</label>
+        <input type="text" id="edit-hero-cta1" name="heroCtaOne">
+      </div>
+      <div class="editor-field">
+        <label for="edit-hero-cta2">CTA Button 2 Text</label>
+        <input type="text" id="edit-hero-cta2" name="heroCtaTwo">
+      </div>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">Featured Products</h4>
+      <div class="editor-field">
+        <label for="edit-featured-title">Section Title</label>
+        <input type="text" id="edit-featured-title" name="featuredTitle">
+      </div>
+      <div id="featured-editor-container">
+        <!-- Featured items will be generated here -->
+      </div>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">Collections</h4>
+      <div class="editor-field">
+        <label for="edit-collections-title">Section Title</label>
+        <input type="text" id="edit-collections-title" name="collectionsTitle">
+      </div>
+      <div id="collections-editor-container">
+        <!-- Collections will be generated here -->
+      </div>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">About Section</h4>
+      <div class="editor-field">
+        <label for="edit-about-title">Section Title</label>
+        <input type="text" id="edit-about-title" name="aboutTitle">
+      </div>
+      <div class="editor-field">
+        <label for="edit-about-content">Content</label>
+        <textarea id="edit-about-content" name="aboutContent" rows="5"></textarea>
+      </div>
+      <div class="editor-field">
+        <label for="edit-about-image">About Image URL</label>
+        <input type="text" id="edit-about-image" name="aboutImage">
+      </div>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">Testimonials</h4>
+      <div class="editor-field">
+        <label for="edit-testimonials-title">Section Title</label>
+        <input type="text" id="edit-testimonials-title" name="testimonialsTitle">
+      </div>
+      <div id="testimonials-editor-container">
+        <!-- Testimonials will be generated here -->
+      </div>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">Newsletter</h4>
+      <div class="editor-field">
+        <label for="edit-newsletter-title">Title</label>
+        <input type="text" id="edit-newsletter-title" name="newsletterTitle">
+      </div>
+      <div class="editor-field">
+        <label for="edit-newsletter-text">Text</label>
+        <textarea id="edit-newsletter-text" name="newsletterText"></textarea>
+      </div>
+      <div class="editor-field">
+        <label for="edit-newsletter-button">Button Text</label>
+        <input type="text" id="edit-newsletter-button" name="newsletterButton">
+      </div>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">Contact Section</h4>
+      <div class="editor-field">
+        <label for="edit-contact-title">Section Title</label>
+        <input type="text" id="edit-contact-title" name="contactTitle">
+      </div>
+      <div class="editor-field">
+        <label for="edit-contact-description">Description</label>
+        <textarea id="edit-contact-description" name="contactDescription"></textarea>
+      </div>
+      <div class="editor-field">
+        <label for="edit-contact-email">Email</label>
+        <input type="email" id="edit-contact-email" name="contactEmail">
+      </div>
+      <div class="editor-field">
+        <label for="edit-contact-phone">Phone</label>
+        <input type="text" id="edit-contact-phone" name="contactPhone">
+      </div>
+      <div class="editor-field">
+        <label for="edit-contact-address">Address</label>
+        <textarea id="edit-contact-address" name="contactAddress"></textarea>
+      </div>
+    </div>
+    
+    <div class="editor-section">
+      <h4 class="editor-section-title">Footer</h4>
+      <div class="editor-field">
+        <label for="edit-footer-text">Copyright Text</label>
+        <input type="text" id="edit-footer-text" name="footerText">
+      </div>
+    </div>
+    
+    <div class="editor-actions">
+      <button class="btn btn-editor" id="saveButton">Save Changes</button>
+      <button class="btn btn-editor btn-download" id="downloadButton">Download HTML</button>
+    </div>
+  </div>
+  
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">Changes saved successfully!</div>
+  
+  <!-- Main Website Content -->
+  <header id="header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="#" class="logo" id="logoText">
+          Élégance Boutique
+        </a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i data-feather="menu"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#featured">Featured</a></li>
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section id="home" class="hero">
+    <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Boutique Collection" class="hero-image" id="heroImage">
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-subtitle" id="heroSubtitle">LUXURY FASHION</p>
+        <h1 class="hero-title" id="heroTitle">Elevate Your Style With Curated Fashion</h1>
+        <p class="hero-description" id="heroDescription">Discover our handpicked collection of designer clothing, accessories, and jewelry that blend timeless elegance with contemporary trends.</p>
+        <div class="hero-cta">
+          <a href="#collections" class="btn" id="heroCtaOne">Shop Collection</a>
+          <a href="#about" class="btn btn-secondary" id="heroCtaTwo">Our Story</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="featured" class="featured">
+    <div class="container">
+      <h2 class="section-title" id="featuredTitle">Featured <span>Products</span></h2>
+      <div class="featured-grid" id="featuredGrid">
+        <div class="featured-card">
+          <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Silk Blouse" class="featured-img">
+          <div class="featured-overlay">
+            <h3 class="featured-title">Silk Blouse</h3>
+            <p class="featured-price">$125.00</p>
+            <a href="#" class="btn">View Details</a>
+          </div>
+        </div>
+        
+        <div class="featured-card">
+          <img src="https://images.unsplash.com/photo-1591369822096-ffd140ec948f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Designer Bag" class="featured-img">
+          <div class="featured-overlay">
+            <h3 class="featured-title">Designer Bag</h3>
+            <p class="featured-price">$349.00</p>
+            <a href="#" class="btn">View Details</a>
+          </div>
+        </div>
+        
+        <div class="featured-card">
+          <img src="https://images.unsplash.com/photo-1508427953056-b00b8d78ebf5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Gold Bracelet" class="featured-img">
+          <div class="featured-overlay">
+            <h3 class="featured-title">Gold Bracelet</h3>
+            <p class="featured-price">$189.00</p>
+            <a href="#" class="btn">View Details</a>
+          </div>
+        </div>
+        
+        <div class="featured-card">
+          <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Designer Heels" class="featured-img">
+          <div class="featured-overlay">
+            <h3 class="featured-title">Designer Heels</h3>
+            <p class="featured-price">$275.00</p>
+            <a href="#" class="btn">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="collections" class="collections">
+    <div class="container">
+      <h2 class="section-title" id="collectionsTitle">Our <span>Collections</span></h2>
+      <div class="collection-grid" id="collectionGrid">
+        <div class="collection-card">
+          <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Summer Collection" class="collection-img">
+          <div class="collection-content">
+            <h3 class="collection-title">Summer Collection</h3>
+            <p>Light fabrics and vibrant colors for the perfect summer look.</p>
+            <a href="#" class="btn">View Collection</a>
+          </div>
+        </div>
+        
+        <div class="collection-card">
+          <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1473&q=80" alt="Evening Wear" class="collection-img">
+          <div class="collection-content">
+            <h3 class="collection-title">Evening Wear</h3>
+            <p>Elegant designs for special occasions and evenings out.</p>
+            <a href="#" class="btn">View Collection</a>
+          </div>
+        </div>
+        
+        <div class="collection-card">
+          <img src="https://images.unsplash.com/photo-1524255684952-d7185b509571?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80" alt="Accessories" class="collection-img">
+          <div class="collection-content">
+            <h3 class="collection-title">Accessories</h3>
+            <p>Complete your look with our designer accessories collection.</p>
+            <a href="#" class="btn">View Collection</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="container">
+      <h2 class="section-title" id="aboutTitle">About <span>Our Boutique</span></h2>
+      <div class="about-grid">
+        <div>
+          <p id="aboutContent">Founded in 2010, Élégance Boutique has become synonymous with sophisticated style and exceptional quality. Our mission is to provide our clientele with a carefully curated selection of designer pieces that represent both timeless elegance and contemporary fashion.</p>
+          <p>Each item in our collection is selected with meticulous attention to detail, quality of materials, and excellence in craftsmanship. We believe that true luxury lies not just in the label, but in the artistry and durability of each piece.</p>
+          <p>Our boutique offers a personalized shopping experience where our expert stylists help you find pieces that not only look beautiful but also align with your personal style and lifestyle needs.</p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Our Boutique" class="about-img" id="aboutImage">
+      </div>
+    </div>
+  </section>
+  
+  <section id="testimonials" class="testimonials">
+    <div class="container">
+      <h2 class="section-title" id="testimonialsTitle">Client <span>Testimonials</span></h2>
+      <div class="testimonial-grid" id="testimonialGrid">
+        <div class="testimonial-card">
+          <p class="testimonial-text">"The quality of clothing at Élégance Boutique is unmatched. I've purchased several pieces that have become staples in my wardrobe, and they continue to look beautiful after years of wear."</p>
+          <div class="testimonial-author">
+            <img src="https://randomuser.me/api/portraits/women/23.jpg" alt="Sophie Williams" class="author-img">
+            <div>
+              <p class="author-name">Sophie Williams</p>
+              <p class="author-title">Regular Client</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <p class="testimonial-text">"The personal styling service provided by Élégance Boutique transformed my wardrobe. Their stylist helped me select pieces that not only complement each other but also enhance my personal style."</p>
+          <div class="testimonial-author">
+            <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="James Chen" class="author-img">
+            <div>
+              <p class="author-name">James Chen</p>
+              <p class="author-title">VIP Client</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <p class="testimonial-text">"I always find the most unique accessories at this boutique. Their collection is thoughtfully curated and offers pieces you won't find in mainstream stores. The quality is exceptional."</p>
+          <div class="testimonial-author">
+            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Elena Rodriguez" class="author-img">
+            <div>
+              <p class="author-name">Elena Rodriguez</p>
+              <p class="author-title">Fashion Blogger</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="newsletter">
+    <div class="container">
+      <div class="newsletter-content">
+        <h2 class="newsletter-title" id="newsletterTitle">Subscribe to Our Newsletter</h2>
+        <p id="newsletterText">Stay updated with our latest collections, exclusive offers, and fashion tips.</p>
+        <form class="newsletter-form" id="newsletterForm">
+          <input type="email" placeholder="Enter your email" class="newsletter-input" required>
+          <button type="submit" class="newsletter-btn" id="newsletterButton">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2 class="section-title" id="contactTitle">Get in <span>Touch</span></h2>
+      <p class="text-center" id="contactDescription">Visit our boutique or contact us to schedule a private shopping appointment.</p>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i data-feather="mail"></i>
+            </div>
+            <div>
+              <h3>Email Us</h3>
+              <p id="contactEmail">info@eleganceboutique.com</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i data-feather="phone"></i>
+            </div>
+            <div>
+              <h3>Call Us</h3>
+              <p id="contactPhone">(555) 123-4567</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i data-feather="map-pin"></i>
+            </div>
+            <div>
+              <h3>Visit Us</h3>
+              <p id="contactAddress">123 Fashion Avenue<br>Styleville, ST 12345<br>Open: 10AM - 7PM Mon-Sat</p>
+            </div>
+          </div>
+        </div>
+        
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+          
+          <button type="submit" class="btn">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo" id="footerLogoText">Élégance Boutique</div>
+          <p>Curated fashion for the discerning client.</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i data-feather="facebook"></i></a>
+            <a href="#" class="social-link"><i data-feather="instagram"></i></a>
+            <a href="#" class="social-link"><i data-feather="twitter"></i></a>
+            <a href="#" class="social-link"><i data-feather="pinterest"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#featured">Featured</a></li>
+            <li><a href="#collections">Collections</a></li>
+            <li><a href="#about">About</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Collections</h3>
+          <ul>
+            <li><a href="#collections">Summer Wear</a></li>
+            <li><a href="#collections">Evening Wear</a></li>
+            <li><a href="#collections">Accessories</a></li>
+            <li><a href="#collections">New Arrivals</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Customer Service</h3>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Shipping & Returns</a></li>
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright" id="footerText">
+        © 2023 Élégance Boutique. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Site content data - this is what users will edit
+    let siteData = {
+      meta: {
+        title: "Élégance Boutique - Luxury Fashion & Accessories",
+        description: "Discover curated designer fashion, accessories, and jewelry at Élégance Boutique. Handpicked collections blending timeless elegance with modern trends.",
+      },
+      header: {
+        logoText: "Élégance Boutique",
+        navItems: ["Home", "Featured", "Collections", "About", "Testimonials", "Contact"],
+      },
+      hero: {
+        subtitle: "LUXURY FASHION",
+        title: "Elevate Your Style With Curated Fashion",
+        description: "Discover our handpicked collection of designer clothing, accessories, and jewelry that blend timeless elegance with contemporary trends.",
+        image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+        ctaOne: "Shop Collection",
+        ctaTwo: "Our Story",
+      },
+      featured: {
+        title: "Featured <span>Products</span>",
+        items: [
+          {
+            image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+            title: "Silk Blouse",
+            price: "$125.00"
+          },
+          {
+            image: "https://images.unsplash.com/photo-1591369822096-ffd140ec948f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+            title: "Designer Bag",
+            price: "$349.00"
+          },
+          {
+            image: "https://images.unsplash.com/photo-1508427953056-b00b8d78ebf5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+            title: "Gold Bracelet",
+            price: "$189.00"
+          },
+          {
+            image: "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+            title: "Designer Heels",
+            price: "$275.00"
+          }
+        ]
+      },
+      collections: {
+        title: "Our <span>Collections</span>",
+        items: [
+          {
+            image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+            title: "Summer Collection",
+            description: "Light fabrics and vibrant colors for the perfect summer look."
+          },
+          {
+            image: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1473&q=80",
+            title: "Evening Wear",
+            description: "Elegant designs for special occasions and evenings out."
+          },
+          {
+            image: "https://images.unsplash.com/photo-1524255684952-d7185b509571?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
+            title: "Accessories",
+            description: "Complete your look with our designer accessories collection."
+          }
+        ]
+      },
+      about: {
+        title: "About <span>Our Boutique</span>",
+        content: "Founded in 2010, Élégance Boutique has become synonymous with sophisticated style and exceptional quality. Our mission is to provide our clientele with a carefully curated selection of designer pieces that represent both timeless elegance and contemporary fashion.",
+        image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+      },
+      testimonials: {
+        title: "Client <span>Testimonials</span>",
+        items: [
+          {
+            text: "The quality of clothing at Élégance Boutique is unmatched. I've purchased several pieces that have become staples in my wardrobe, and they continue to look beautiful after years of wear.",
+            authorName: "Sophie Williams",
+            authorTitle: "Regular Client",
+            authorImage: "https://randomuser.me/api/portraits/women/23.jpg"
+          },
+          {
+            text: "The personal styling service provided by Élégance Boutique transformed my wardrobe. Their stylist helped me select pieces that not only complement each other but also enhance my personal style.",
+            authorName: "James Chen",
+            authorTitle: "VIP Client",
+            authorImage: "https://randomuser.me/api/portraits/men/54.jpg"
+          },
+          {
+            text: "I always find the most unique accessories at this boutique. Their collection is thoughtfully curated and offers pieces you won't find in mainstream stores. The quality is exceptional.",
+            authorName: "Elena Rodriguez",
+            authorTitle: "Fashion Blogger",
+            authorImage: "https://randomuser.me/api/portraits/women/65.jpg"
+          }
+        ]
+      },
+      newsletter: {
+        title: "Subscribe to Our Newsletter",
+        text: "Stay updated with our latest collections, exclusive offers, and fashion tips.",
+        button: "Subscribe"
+      },
+      contact: {
+        title: "Get in <span>Touch</span>",
+        description: "Visit our boutique or contact us to schedule a private shopping appointment.",
+        email: "info@eleganceboutique.com",
+        phone: "(555) 123-4567",
+        address: "123 Fashion Avenue<br>Styleville, ST 12345<br>Open: 10AM - 7PM Mon-Sat"
+      },
+      footer: {
+        text: "© 2023 Élégance Boutique. All rights reserved."
+      }
+    };
+
+    // Initialize Feather icons
+    document.addEventListener('DOMContentLoaded', () => {
+      feather.replace();
+      initializeSite();
+    });
+
+    // Mobile menu functionality
+    function setupMobileMenu() {
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      
+      mobileMenuBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+      });
+      
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+        });
+      });
+    }
+
+    // Header scroll effect
+    function setupScrollEffect() {
+      window.addEventListener('scroll', function() {
+        const header = document.querySelector('header');
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+    }
+
+    // Editor panel functionality
+    function setupEditor() {
+      const editorToggle = document.getElementById('editorToggle');
+      const editorClose = document.getElementById('editorClose');
+      const editorPanel = document.getElementById('editorPanel');
+      const saveButton = document.getElementById('saveButton');
+      const downloadButton = document.getElementById('downloadButton');
+      const toast = document.getElementById('toast');
+      
+      // Editor toggle
+      editorToggle.addEventListener('click', () => {
+        editorPanel.classList.add('open');
+      });
+      
+      editorClose.addEventListener('click', () => {
+        editorPanel.classList.remove('open');
+      });
+      
+      // Populate editor fields with initial data
+      populateEditorFields();
+      
+      // Save button functionality
+      saveButton.addEventListener('click', () => {
+        updateSiteData();
+        updateSiteContent();
+        showToast('Changes saved successfully!');
+      });
+      
+      // Download button functionality
+      downloadButton.addEventListener('click', () => {
+        downloadHTML();
+      });
+      
+      // Contact form submission
+      document.getElementById('contactForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Message sent successfully! (Demo only)');
+        e.target.reset();
+      });
+      
+      // Newsletter form submission
+      document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Subscribed successfully! (Demo only)');
+        e.target.reset();
+      });
+    }
+
+    // Initialize site content and functionality
+    function initializeSite() {
+      updateSiteContent();
+      setupMobileMenu();
+      setupScrollEffect();
+      setupEditor();
+      
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    }
+
+    // Populate editor fields with current data
+    function populateEditorFields() {
+      // Metadata
+      document.getElementById('edit-title').value = siteData.meta.title;
+      document.getElementById('edit-description').value = siteData.meta.description;
+      
+      // Header
+      document.getElementById('edit-logo-text').value = siteData.header.logoText;
+      document.getElementById('edit-nav-items').value = siteData.header.navItems.join(', ');
+      
+      // Hero
+      document.getElementById('edit-hero-subtitle').value = siteData.hero.subtitle;
+      document.getElementById('edit-hero-title').value = siteData.hero.title;
+      document.getElementById('edit-hero-description').value = siteData.hero.description;
+      document.getElementById('edit-hero-image').value = siteData.hero.image;
+      document.getElementById('edit-hero-cta1').value = siteData.hero.ctaOne;
+      document.getElementById('edit-hero-cta2').value = siteData.hero.ctaTwo;
+      
+      // Featured products
+      document.getElementById('edit-featured-title').value = siteData.featured.title;
+      const featuredContainer = document.getElementById('featured-editor-container');
+      featuredContainer.innerHTML = '';
+      
+      siteData.featured.items.forEach((item, index) => {
+        const itemHTML = `
+          <div class="editor-section" style="border-left: 2px solid var(--border); padding-left: 1rem; margin-top: 1rem;">
+            <h5 style="margin-bottom: 0.5rem;">Product ${index + 1}</h5>
+            <div class="editor-field">
+              <label for="edit-featured-image-${index}">Image URL</label>
+              <input type="text" id="edit-featured-image-${index}" value="${item.image}">
+            </div>
+            <div class="editor-field">
+              <label for="edit-featured-title-${index}">Title</label>
+              <input type="text" id="edit-featured-title-${index}" value="${item.title}">
+            </div>
+            <div class="editor-field">
+              <label for="edit-featured-price-${index}">Price</label>
+              <input type="text" id="edit-featured-price-${index}" value="${item.price}">
+            </div>
+          </div>
+        `;
+        featuredContainer.innerHTML += itemHTML;
+      });
+      
+      // Collections
+      document.getElementById('edit-collections-title').value = siteData.collections.title;
+      const collectionsContainer = document.getElementById('collections-editor-container');
+      collectionsContainer.innerHTML = '';
+      
+      siteData.collections.items.forEach((item, index) => {
+        const itemHTML = `
+          <div class="editor-section" style="border-left: 2px solid var(--border); padding-left: 1rem; margin-top: 1rem;">
+            <h5 style="margin-bottom: 0.5rem;">Collection ${index + 1}</h5>
+            <div class="editor-field">
+              <label for="edit-collection-image-${index}">Image URL</label>
+              <input type="text" id="edit-collection-image-${index}" value="${item.image}">
+            </div>
+            <div class="editor-field">
+              <label for="edit-collection-title-${index}">Title</label>
+              <input type="text" id="edit-collection-title-${index}" value="${item.title}">
+            </div>
+            <div class="editor-field">
+              <label for="edit-collection-desc-${index}">Description</label>
+              <textarea id="edit-collection-desc-${index}">${item.description}</textarea>
+            </div>
+          </div>
+        `;
+        collectionsContainer.innerHTML += itemHTML;
+      });
+      
+      // About
+      document.getElementById('edit-about-title').value = siteData.about.title;
+      document.getElementById('edit-about-content').value = siteData.about.content;
+      document.getElementById('edit-about-image').value = siteData.about.image;
+      
+      // Testimonials
+      document.getElementById('edit-testimonials-title').value = siteData.testimonials.title;
+      const testimonialsContainer = document.getElementById('testimonials-editor-container');
+      testimonialsContainer.innerHTML = '';
+      
+      siteData.testimonials.items.forEach((item, index) => {
+        const testimonialHTML = `
+          <div class="editor-section" style="border-left: 2px solid var(--border); padding-left: 1rem; margin-top: 1rem;">
+            <h5 style="margin-bottom: 0.5rem;">Testimonial ${index + 1}</h5>
+            <div class="editor-field">
+              <label for="edit-testimonial-text-${index}">Text</label>
+              <textarea id="edit-testimonial-text-${index}">${item.text}</textarea>
+            </div>
+            <div class="editor-field">
+              <label for="edit-testimonial-name-${index}">Author Name</label>
+              <input type="text" id="edit-testimonial-name-${index}" value="${item.authorName}">
+            </div>
+            <div class="editor-field">
+              <label for="edit-testimonial-title-${index}">Author Title</label>
+              <input type="text" id="edit-testimonial-title-${index}" value="${item.authorTitle}">
+            </div>
+            <div class="editor-field">
+              <label for="edit-testimonial-img-${index}">Author Image URL</label>
+              <input type="text" id="edit-testimonial-img-${index}" value="${item.authorImage}">
+            </div>
+          </div>
+        `;
+        testimonialsContainer.innerHTML += testimonialHTML;
+      });
+      
+      // Newsletter
+      document.getElementById('edit-newsletter-title').value = siteData.newsletter.title;
+      document.getElementById('edit-newsletter-text').value = siteData.newsletter.text;
+      document.getElementById('edit-newsletter-button').value = siteData.newsletter.button;
+      
+      // Contact
+      document.getElementById('edit-contact-title').value = siteData.contact.title;
+      document.getElementById('edit-contact-description').value = siteData.contact.description;
+      document.getElementById('edit-contact-email').value = siteData.contact.email;
+      document.getElementById('edit-contact-phone').value = siteData.contact.phone;
+      document.getElementById('edit-contact-address').value = siteData.contact.address.replace('<br>', '\n').replace('<br>', '\n');
+      
+      // Footer
+      document.getElementById('edit-footer-text').value = siteData.footer.text;
+    }
+
+    // Update site data from editor fields
+    function updateSiteData() {
+      // Metadata
+      siteData.meta.title = document.getElementById('edit-title').value;
+      siteData.meta.description = document.getElementById('edit-description').value;
+      
+      // Header
+      siteData.header.logoText = document.getElementById('edit-logo-text').value;
+      siteData.header.navItems = document.getElementById('edit-nav-items').value.split(',').map(item => item.trim());
+      
+      // Hero
+      siteData.hero.subtitle = document.getElementById('edit-hero-subtitle').value;
+      siteData.hero.title = document.getElementById('edit-hero-title').value;
+      siteData.hero.description = document.getElementById('edit-hero-description').value;
+      siteData.hero.image = document.getElementById('edit-hero-image').value;
+      siteData.hero.ctaOne = document.getElementById('edit-hero-cta1').value;
+      siteData.hero.ctaTwo = document.getElementById('edit-hero-cta2').value;
+      
+      // Featured products
+      siteData.featured.title = document.getElementById('edit-featured-title').value;
+      siteData.featured.items.forEach((item, index) => {
+        item.image = document.getElementById(`edit-featured-image-${index}`).value;
+        item.title = document.getElementById(`edit-featured-title-${index}`).value;
+        item.price = document.getElementById(`edit-featured-price-${index}`).value;
+      });
+      
+      // Collections
+      siteData.collections.title = document.getElementById('edit-collections-title').value;
+      siteData.collections.items.forEach((item, index) => {
+        item.image = document.getElementById(`edit-collection-image-${index}`).value;
+        item.title = document.getElementById(`edit-collection-title-${index}`).value;
+        item.description = document.getElementById(`edit-collection-desc-${index}`).value;
+      });
+      
+      // About
+      siteData.about.title = document.getElementById('edit-about-title').value;
+      siteData.about.content = document.getElementById('edit-about-content').value;
+      siteData.about.image = document.getElementById('edit-about-image').value;
+      
+      // Testimonials
+      siteData.testimonials.title = document.getElementById('edit-testimonials-title').value;
+      siteData.testimonials.items.forEach((item, index) => {
+        item.text = document.getElementById(`edit-testimonial-text-${index}`).value;
+        item.authorName = document.getElementById(`edit-testimonial-name-${index}`).value;
+        item.authorTitle = document.getElementById(`edit-testimonial-title-${index}`).value;
+        item.authorImage = document.getElementById(`edit-testimonial-img-${index}`).value;
+      });
+      
+      // Newsletter
+      siteData.newsletter.title = document.getElementById('edit-newsletter-title').value;
+      siteData.newsletter.text = document.getElementById('edit-newsletter-text').value;
+      siteData.newsletter.button = document.getElementById('edit-newsletter-button').value;
+      
+      // Contact
+      siteData.contact.title = document.getElementById('edit-contact-title').value;
+      siteData.contact.description = document.getElementById('edit-contact-description').value;
+      siteData.contact.email = document.getElementById('edit-contact-email').value;
+      siteData.contact.phone = document.getElementById('edit-contact-phone').value;
+      siteData.contact.address = document.getElementById('edit-contact-address').value.replace(/\n/g, '<br>');
+      
+      // Footer
+      siteData.footer.text = document.getElementById('edit-footer-text').value;
+    }
+
+    // Update website content with current data
+    function updateSiteContent() {
+      // Update page title and meta description
+      document.title = siteData.meta.title;
+      document.querySelector('meta[name="description"]').setAttribute('content', siteData.meta.description);
+      
+      // Update header
+      document.getElementById('logoText').textContent = siteData.header.logoText;
+      
+      const navLinks = document.getElementById('navLinks');
+      navLinks.innerHTML = '';
+      siteData.header.navItems.forEach(item => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.textContent = item;
+        a.href = `#${item.toLowerCase()}`;
+        li.appendChild(a);
+        navLinks.appendChild(li);
+      });
+      
+      // Update hero section
+      document.getElementById('heroSubtitle').textContent = siteData.hero.subtitle;
+      document.getElementById('heroTitle').textContent = siteData.hero.title;
+      document.getElementById('heroDescription').textContent = siteData.hero.description;
+      document.getElementById('heroImage').src = siteData.hero.image;
+      document.getElementById('heroCtaOne').textContent = siteData.hero.ctaOne;
+      document.getElementById('heroCtaTwo').textContent = siteData.hero.ctaTwo;
+      
+      // Update featured section
+      document.getElementById('featuredTitle').innerHTML = siteData.featured.title;
+      const featuredGrid = document.getElementById('featuredGrid');
+      featuredGrid.innerHTML = '';
+      
+      siteData.featured.items.forEach(item => {
+        const featuredCard = document.createElement('div');
+        featuredCard.className = 'featured-card';
+        featuredCard.innerHTML = `
+          <img src="${item.image}" alt="${item.title}" class="featured-img">
+          <div class="featured-overlay">
+            <h3 class="featured-title">${item.title}</h3>
+            <p class="featured-price">${item.price}</p>
+            <a href="#" class="btn">View Details</a>
+          </div>
+        `;
+        featuredGrid.appendChild(featuredCard);
+      });
+      
+      // Update collections section
+      document.getElementById('collectionsTitle').innerHTML = siteData.collections.title;
+      const collectionGrid = document.getElementById('collectionGrid');
+      collectionGrid.innerHTML = '';
+      
+      siteData.collections.items.forEach(item => {
+        const collectionCard = document.createElement('div');
+        collectionCard.className = 'collection-card';
+        collectionCard.innerHTML = `
+          <img src="${item.image}" alt="${item.title}" class="collection-img">
+          <div class="collection-content">
+            <h3 class="collection-title">${item.title}</h3>
+            <p>${item.description}</p>
+            <a href="#" class="btn">View Collection</a>
+          </div>
+        `;
+        collectionGrid.appendChild(collectionCard);
+      });
+      
+      // Update about section
+      document.getElementById('aboutTitle').innerHTML = siteData.about.title;
+      document.getElementById('aboutContent').textContent = siteData.about.content;
+      document.getElementById('aboutImage').src = siteData.about.image;
+      
+      // Update testimonials section
+      document.getElementById('testimonialsTitle').innerHTML = siteData.testimonials.title;
+      const testimonialGrid = document.getElementById('testimonialGrid');
+      testimonialGrid.innerHTML = '';
+      
+      siteData.testimonials.items.forEach(item => {
+        const testimonialCard = document.createElement('div');
+        testimonialCard.className = 'testimonial-card';
+        testimonialCard.innerHTML = `
+          <p class="testimonial-text">"${item.text}"</p>
+          <div class="testimonial-author">
+            <img src="${item.authorImage}" alt="${item.authorName}" class="author-img">
+            <div>
+              <p class="author-name">${item.authorName}</p>
+              <p class="author-title">${item.authorTitle}</p>
+            </div>
+          </div>
+        `;
+        testimonialGrid.appendChild(testimonialCard);
+      });
+      
+      // Update newsletter section
+      document.getElementById('newsletterTitle').textContent = siteData.newsletter.title;
+      document.getElementById('newsletterText').textContent = siteData.newsletter.text;
+      document.getElementById('newsletterButton').textContent = siteData.newsletter.button;
+      
+      // Update contact section
+      document.getElementById('contactTitle').innerHTML = siteData.contact.title;
+      document.getElementById('contactDescription').textContent = siteData.contact.description;
+      document.getElementById('contactEmail').textContent = siteData.contact.email;
+      document.getElementById('contactPhone').textContent = siteData.contact.phone;
+      document.getElementById('contactAddress').innerHTML = siteData.contact.address;
+      
+      // Update footer
+      document.getElementById('footerLogoText').textContent = siteData.header.logoText;
+      document.getElementById('footerText').textContent = siteData.footer.text;
+      
+      // Re-initialize Feather icons
+      feather.replace();
+    }
+
+    // Show toast notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Download HTML function
+    function downloadHTML() {
+      // Get current HTML
+      const htmlDoctype = '<!DOCTYPE html>';
+      const htmlContent = document.documentElement.outerHTML;
+      
+      // Insert site data as JSON
+      const siteDataScript = `
+        <script>
+          // Site content data
+          let siteData = ${JSON.stringify(siteData, null, 2)};
+        </script>
+      `;
+      
+      // Replace the existing site data script tag with updated data
+      const updatedHtmlContent = htmlContent.replace(/<script>\s*\/\/ Site content data[\s\S]*?<\/script>/, siteDataScript);
+      
+      // Create download link
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlDoctype + updatedHtmlContent));
+      element.setAttribute('download', 'boutique-website.html');
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+      
+      showToast('Website downloaded successfully!');
+    }
+  </script>
+</body>
+</html>
+
