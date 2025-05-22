@@ -1287,6 +1287,12 @@
   </footer>
 
   <script>
+    const encrypted = "U2FsdGVkX1..."; // encrypted HTML string
+    const decrypted = decryptHTML(encrypted); // Use a JS AES library like CryptoJS
+    document.write(decrypted);
+  </script>
+  
+  <script>
     // Site content data - this is what users will edit
     let siteData = {
       meta: {
